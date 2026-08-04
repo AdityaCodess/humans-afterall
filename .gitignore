@@ -1,0 +1,77 @@
+# ==============================================================================
+# 1. General & OS
+# ==============================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+.vscode/
+.idea/
+*.log
+*.bak
+*.tmp
+
+# ==============================================================================
+# 2. Node.js Ecosystem (client/ & api-gateway/)
+# ==============================================================================
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Environment variables (NEVER commit these)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ==============================================================================
+# 3. Python Ecosystem (macro-sim/)
+# ==============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments (This cleans up the "chaos")
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing and profiling
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# ==============================================================================
+# 4. Rust Ecosystem (spatial-engine/)
+# ==============================================================================
+# The target directory contains all compiled binaries and takes up massive space
+/spatial-engine/target/
+**/*.rs.bk
+
+# ==============================================================================
+# 5. Docker
+# ==============================================================================
+.docker/
+docker-compose.override.yaml
