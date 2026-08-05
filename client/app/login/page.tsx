@@ -38,7 +38,6 @@ export default function LoginPage() {
       });
 
       if (res.ok) {
-        // Success! The HTTP-only cookie is now set in the browser.
         setIsLoggedIn(true);
       } else {
         const data = await res.json();
@@ -50,113 +49,119 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    // Placeholder for when we wire up the Google OAuth flow
     console.log("Initiating Google OAuth...");
   };
 
   if (isLoggedIn) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-extrabold text-emerald-500 tracking-widest animate-pulse">
-          ACCESS GRANTED
-        </h2>
-        <p className="mt-4 text-zinc-400">
-          Session token verified. Awaiting further frontend construction...
-        </p>
+      <div className="relative min-h-screen flex flex-col justify-center items-center bg-black overflow-hidden font-sans">
+        {/* Placeholder for 3D Background */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-black to-black opacity-80" />
+
+        <div className="relative z-10 flex flex-col items-center">
+          <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 tracking-[0.2em] animate-pulse drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+            SYSTEM ONLINE
+          </h2>
+          <p className="mt-4 text-zinc-400 tracking-widest text-sm uppercase">
+            Connection Established
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-emerald-500 tracking-tight">
-          System Login
-        </h2>
-      </div>
+    <div className="relative min-h-screen flex flex-col justify-center items-center bg-black overflow-hidden font-sans selection:bg-emerald-500/30">
+      {/* Background Layer - Ready for a Three.js Canvas or Video */}
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-luminosity" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black" />
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-zinc-900 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-zinc-800">
+      <div className="relative z-10 w-full max-w-sm px-6">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-black text-white tracking-[0.15em] drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+            HUMANS_
+          </h1>
+          <p className="text-xs text-emerald-400 tracking-[0.3em] mt-2 font-semibold">
+            AUTHENTICATION PROTOCOL
+          </p>
+        </div>
+
+        {/* Glassmorphism Container */}
+        <div className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] p-8 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.8)]">
           <form
             className="space-y-6"
             onSubmit={isOtpSent ? handleVerifyOtp : handleSendOtp}
           >
-            <div>
+            <div className="space-y-1">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-zinc-300"
+                className="block text-[10px] uppercase tracking-[0.1em] text-zinc-500 font-bold ml-1"
               >
-                Email address
+                Operator Email
               </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  disabled={isOtpSent}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-zinc-700 rounded-md shadow-sm bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm disabled:opacity-50 transition-opacity"
-                />
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                disabled={isOtpSent}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-zinc-700 text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all disabled:opacity-30"
+                placeholder="enter.address@domain.com"
+              />
             </div>
 
             {isOtpSent && (
-              <div>
+              <div className="space-y-1 animate-in fade-in slide-in-from-top-2 duration-300">
                 <label
                   htmlFor="otp"
-                  className="block text-sm font-medium text-zinc-300"
+                  className="block text-[10px] uppercase tracking-[0.1em] text-zinc-500 font-bold ml-1"
                 >
-                  Authentication Code
+                  Access Code
                 </label>
-                <div className="mt-1">
-                  <input
-                    id="otp"
-                    name="otp"
-                    type="text"
-                    required
-                    value={otpCode}
-                    onChange={(e) => setOtpCode(e.target.value)}
-                    className="appearance-none block w-full px-3 py-2 border border-zinc-700 rounded-md shadow-sm bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                  />
-                </div>
+                <input
+                  id="otp"
+                  name="otp"
+                  type="text"
+                  required
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value)}
+                  className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-emerald-400 font-mono tracking-[0.2em] placeholder-zinc-700 text-center text-lg focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                  placeholder="000000"
+                  maxLength={6}
+                />
               </div>
             )}
 
-            <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-zinc-950 bg-emerald-500 hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 focus:ring-offset-zinc-900 transition-colors"
-              >
-                {isOtpSent ? "Verify Code" : "Send Access Code"}
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="w-full relative group overflow-hidden rounded-lg bg-emerald-500/10 border border-emerald-500/30 px-4 py-3 text-sm font-bold text-emerald-400 tracking-widest uppercase transition-all hover:bg-emerald-500 hover:text-black hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]"
+            >
+              <span className="relative z-10">
+                {isOtpSent ? "Verify Link" : "Initialize"}
+              </span>
+            </button>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-zinc-700" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-zinc-900 text-zinc-400">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <button
-                onClick={handleGoogleLogin}
-                type="button"
-                className="w-full flex justify-center py-2 px-4 border border-zinc-700 rounded-md shadow-sm bg-zinc-950 text-sm font-medium text-zinc-300 hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 focus:ring-offset-zinc-900 transition-colors"
-              >
-                Google
-              </button>
-            </div>
+          {/* Divider */}
+          <div className="mt-6 flex items-center justify-between text-zinc-600">
+            <div className="w-full h-[1px] bg-white/10"></div>
+            <span className="px-3 text-[10px] uppercase tracking-widest font-bold">
+              Or
+            </span>
+            <div className="w-full h-[1px] bg-white/10"></div>
           </div>
+
+          {/* OAuth Button */}
+          <button
+            onClick={handleGoogleLogin}
+            type="button"
+            className="mt-6 w-full flex justify-center items-center gap-3 bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-sm font-bold text-zinc-300 tracking-widest transition-all hover:bg-white hover:text-black"
+          >
+            GOOGLE
+          </button>
         </div>
       </div>
     </div>

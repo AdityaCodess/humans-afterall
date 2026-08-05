@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # -------------------------------------------------------------
   # 1. The Frontend Client (Next.js / Three.js)
@@ -10,9 +8,11 @@ services:
     # In dev, we mount the volume and run the dev server
     command: sh -c "npm install && npm run dev"
     ports:
-      - "3000:3000"
+      - "5000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:4000
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - api-gateway
     volumes:
@@ -28,6 +28,8 @@ services:
     command: sh -c "npm install && npx tsx src/index.ts && npm run dev"
     ports:
       - "4000:4000"
+    dns:
+      - 8.8.8.8
     env_file:
       - ./api-gateway/.env
     environment:
