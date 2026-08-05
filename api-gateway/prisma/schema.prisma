@@ -1,0 +1,53 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+// ------------------------------------------------------
+// AUTHENTICATION MODELS
+// ------------------------------------------------------
+
+model User {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  name          String?
+  authMethod    String      @default("OTP") // "GOOGLE" or "OTP"
+  otpCode       String?     
+  otpExpiry     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  // Relations
+  accounts      Account[]
+  characters    Character[]
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  provider          String  // e.g., "google"
+  providerAccountId String  
+  accessToken       String?
+  refreshToken      String?
+  
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ------------------------------------------------------
+// GAME STATE MODELS
+// ------------------------------------------------------
+
+model Character {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String
+  level     Int      @default(1)
+  health    Int      @default(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

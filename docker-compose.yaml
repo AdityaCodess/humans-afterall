@@ -5,7 +5,7 @@ services:
   # 1. The Frontend Client (Next.js / Three.js)
   # -------------------------------------------------------------
   client:
-    image: node:20-alpine
+    image: node:22-alpine
     working_dir: /app
     # In dev, we mount the volume and run the dev server
     command: sh -c "npm install && npm run dev"
@@ -23,15 +23,17 @@ services:
   # 2. The REST API Gateway (Node.js / Express)
   # -------------------------------------------------------------
   api-gateway:
-    image: node:20-alpine
+    image: node:22-alpine
     working_dir: /app
-    command: sh -c "npm install && npx tsx src/index.ts"
+    command: sh -c "npm install && npx tsx src/index.ts && npm run dev"
     ports:
       - "4000:4000"
+    env_file:
+      - ./api-gateway/.env
     environment:
       - PORT=4000
       - REDIS_URL=redis://redis:6379
-      - DATABASE_URL=postgres://admin:secret@postgres:5432/humans_world
+      - DATABASE_URL=postgresql://admin:secret@postgres:5432/humans_world
     depends_on:
       - redis
       - postgres
@@ -79,7 +81,7 @@ services:
   postgres:
     image: postgres:15-alpine
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: secret
