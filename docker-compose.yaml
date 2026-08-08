@@ -71,12 +71,13 @@ services:
       - "9001:9001/tcp" # Signaling / WebSockets
     environment:
       - REDIS_URL=redis://redis:6379
+      - CARGO_TARGET_DIR=/tmp/target
     depends_on:
       - redis
     volumes:
       - ./spatial-engine:/app
       - cargo_cache:/usr/local/cargo/registry
-
+      - ./spatial-engine:/app
   # -------------------------------------------------------------
   # 5. Permanent History Ledger (PostgreSQL)
   # -------------------------------------------------------------
