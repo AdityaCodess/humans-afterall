@@ -1,111 +1,177 @@
 'use client';
 
-import React from 'react';
-import { Activity, Cpu, Hexagon, Network, Radar, Settings2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { 
+  Globe, Users, Activity, Database, Clock, 
+  ChevronRight, Brain, Heart, Landmark, Briefcase, 
+  ShieldAlert
+} from 'lucide-react';
 
-export default function SimulationHUD() {
+export default function MasterSimulationHUD() {
+  const [simTime, setSimTime] = useState(new Date('2026-08-08T08:00:00'));
+
+  // Simulated world clock ticking forward
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSimTime(prev => new Date(prev.getTime() + 60000)); // 1 minute per tick
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="h-screen w-full bg-black text-zinc-300 font-sans overflow-hidden flex flex-col selection:bg-zinc-800">
+    <div className="h-screen w-full bg-[#050505] text-zinc-300 font-sans overflow-hidden flex flex-col selection:bg-zinc-800">
       
-      {/* Top Global Status Bar */}
-      <header className="h-14 w-full border-b border-white/10 bg-zinc-950/80 backdrop-blur-md flex items-center justify-between px-6 z-50">
+      {/* Top Global Telemetry Bar */}
+      <header className="h-12 w-full border-b border-zinc-800/80 bg-[#0a0a0c] flex items-center justify-between px-4 z-50">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <Hexagon className="w-5 h-5 text-emerald-500" />
-            <span className="font-black tracking-widest text-sm text-white">SPATIAL_OS</span>
+            <Globe className="w-4 h-4 text-zinc-500" />
+            <span className="font-black tracking-widest text-xs text-white uppercase">Humans_After_All</span>
           </div>
-          <div className="h-4 w-[1px] bg-white/20" />
-          <div className="flex items-center gap-2 text-xs font-bold tracking-widest text-zinc-500 uppercase">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Engine Online
+          <div className="h-4 w-[1px] bg-zinc-800" />
+          <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-zinc-500 uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Core Engine Online
           </div>
         </div>
 
-        <div className="flex items-center gap-8">
-          <div className="flex flex-col items-end">
-            <span className="text-[9px] uppercase tracking-[0.2em] text-zinc-500 font-bold">Grid Load</span>
-            <span className="font-mono text-sm text-white">24.8%</span>
+        <div className="flex items-center gap-6 text-xs font-mono">
+          <div className="flex items-center gap-2 text-zinc-400">
+            <Clock className="w-3.5 h-3.5 text-zinc-500" />
+            {simTime.toLocaleDateString()} | {simTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </div>
-          <div className="flex flex-col items-end">
-            <span className="text-[9px] uppercase tracking-[0.2em] text-zinc-500 font-bold">Active Entities</span>
-            <span className="font-mono text-sm text-emerald-400">1,024</span>
+          <div className="flex items-center gap-2 text-zinc-400">
+            <Users className="w-3.5 h-3.5 text-zinc-500" />
+            Pop: 8,492,103
           </div>
         </div>
       </header>
 
-      {/* Main Interface */}
-      <main className="flex-1 w-full flex relative">
+      <main className="flex-1 w-full flex relative overflow-hidden">
         
-        {/* Left Toolbar - Build & Management */}
-        <aside className="w-16 h-full border-r border-white/10 bg-zinc-950/50 backdrop-blur-md flex flex-col items-center py-6 gap-6 z-40">
-          <button className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all">
-            <Radar className="w-5 h-5" />
-          </button>
-          <button className="p-3 rounded-xl hover:bg-white/5 text-zinc-600 hover:text-zinc-400 transition-all">
-            <Network className="w-5 h-5" />
-          </button>
-          <button className="p-3 rounded-xl hover:bg-white/5 text-zinc-600 hover:text-zinc-400 transition-all">
-            <Cpu className="w-5 h-5" />
-          </button>
-        </aside>
-
-        {/* Center Viewport - Reserved for Real-Time Graphics */}
-        <section className="flex-1 h-full relative bg-zinc-900 overflow-hidden">
-          {/* Grid Overlay Placeholder */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
-          
-          {/* Target Reticle / Map Center Placeholder */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-white/10 rounded-full flex items-center justify-center">
-            <div className="w-1 h-1 bg-emerald-500 rounded-full" />
-            <div className="absolute top-0 w-[1px] h-4 bg-white/20" />
-            <div className="absolute bottom-0 w-[1px] h-4 bg-white/20" />
-            <div className="absolute left-0 w-4 h-[1px] bg-white/20" />
-            <div className="absolute right-0 w-4 h-[1px] bg-white/20" />
+        {/* Left Panel - Macro Dashboard & Event Log */}
+        <aside className="w-72 h-full border-r border-zinc-800/80 bg-[#0a0a0c]/90 flex flex-col z-40 relative">
+          <div className="p-4 border-b border-zinc-800/80">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2 mb-4">
+              <Activity className="w-3 h-3" /> Macro Simulation
+            </h2>
+            
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between text-[10px] text-zinc-400 font-bold uppercase tracking-wider mb-1">
+                  <span>Global Market</span>
+                  <span className="text-red-400">-1.2%</span>
+                </div>
+                <div className="h-1 w-full bg-zinc-900 rounded-full overflow-hidden">
+                  <div className="h-full bg-zinc-600 w-[45%]" />
+                </div>
+              </div>
+              
+              <div>
+                <div className="flex justify-between text-[10px] text-zinc-400 font-bold uppercase tracking-wider mb-1">
+                  <span>Geopolitical Tension</span>
+                  <span className="text-amber-400">ELEVATED</span>
+                </div>
+                <div className="h-1 w-full bg-zinc-900 rounded-full overflow-hidden">
+                  <div className="h-full bg-amber-500 w-[78%]" />
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Environmental Readout */}
-          <div className="absolute bottom-6 left-6 flex items-center gap-4 text-xs font-mono text-zinc-500">
-            <span>X: 104.22</span>
-            <span>Y: -45.91</span>
-            <span>Z: 0.00</span>
+          <div className="flex-1 p-4 overflow-y-auto scrollbar-hide flex flex-col gap-3">
+            <h3 className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold sticky top-0 bg-[#0a0a0c]/90 py-1">Live History Log</h3>
+            
+            {/* Example Live Events */}
+            <div className="p-3 bg-zinc-900/50 border border-zinc-800/50 rounded flex flex-col gap-1">
+              <span className="text-[9px] font-mono text-zinc-500">14:22 - SECTOR 4</span>
+              <span className="text-xs text-zinc-300">Local election concluded. Elias Thorne elected Mayor.</span>
+            </div>
+            
+            <div className="p-3 bg-red-950/20 border border-red-900/30 rounded flex flex-col gap-1">
+              <span className="text-[9px] font-mono text-red-500/70">14:18 - SECTOR 9</span>
+              <span className="text-xs text-red-200">Riots broken out over food shortages. 42 entities injured.</span>
+            </div>
+          </div>
+        </aside>
+
+        {/* Center - Live Spatial Viewport */}
+        <section className="flex-1 h-full relative bg-[#050505] overflow-hidden flex flex-col items-center justify-center">
+          {/* Subtle Grid Background */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
+          
+          <div className="relative z-10 flex flex-col items-center justify-center opacity-30 pointer-events-none">
+            <Database className="w-12 h-12 text-zinc-600 mb-4" />
+            <span className="font-mono text-xs tracking-widest text-zinc-500 uppercase">Awaiting Spatial Engine Render Context</span>
+            <span className="font-mono text-[10px] text-zinc-600 mt-2">X: 142.44 | Y: -84.11</span>
           </div>
         </section>
 
-        {/* Right Panel - Data & Telemetry */}
-        <aside className="w-80 h-full border-l border-white/10 bg-zinc-950/80 backdrop-blur-md flex flex-col z-40 p-6">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xs font-black uppercase tracking-widest text-zinc-400">
-              Telemetry
-            </h2>
-            <Settings2 className="w-4 h-4 text-zinc-600" />
-          </div>
-
-          {/* Data Module 1 */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Network Stability</span>
-              <span className="text-xs font-mono text-white">99.9%</span>
+        {/* Right Panel - Entity Inspector */}
+        <aside className="w-80 h-full border-l border-zinc-800/80 bg-[#0a0a0c]/90 flex flex-col z-40">
+          {/* Profile Header */}
+          <div className="p-5 border-b border-zinc-800/80 bg-zinc-900/30">
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <h2 className="text-lg font-bold text-white tracking-wide">Arthur Pendelton</h2>
+                <p className="text-xs font-mono text-zinc-500">ID: #8492-A44</p>
+              </div>
+              <span className="px-2 py-1 bg-zinc-800 text-[9px] uppercase tracking-widest font-bold text-zinc-400 rounded">Age 42</span>
             </div>
-            <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-500 w-[99%]" />
-            </div>
-          </div>
-
-          {/* Live Feed / Activity Log */}
-          <div className="flex-1 flex flex-col min-h-0">
-            <h3 className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4 flex items-center gap-2">
-              <Activity className="w-3 h-3" />
-              Event Log
-            </h3>
             
-            <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-hide">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="flex gap-3 text-xs font-mono">
-                  <span className="text-zinc-600 border-r border-white/10 pr-2">11:4{i}:00</span>
-                  <span className="text-zinc-400">Vector node initialized.</span>
-                </div>
-              ))}
+            <div className="flex items-center gap-2 text-xs text-zinc-400 mt-2">
+              <Briefcase className="w-3 h-3 text-zinc-500" />
+              Senior Architect, Vertex Corp
             </div>
+          </div>
+
+          {/* Deep Data */}
+          <div className="flex-1 overflow-y-auto p-5 space-y-6">
+            
+            {/* Core Ambition */}
+            <div>
+              <h3 className="text-[10px] uppercase tracking-[0.2em] text-zinc-600 font-bold mb-2">Primary Ambition</h3>
+              <div className="p-3 bg-zinc-900/50 border border-zinc-800 rounded text-sm text-zinc-300 italic border-l-2 border-l-emerald-500">
+                "I want to build a legacy that outlasts me."
+              </div>
+            </div>
+
+            {/* Attributes */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-3 bg-zinc-900/30 border border-zinc-800/50 rounded">
+                <Brain className="w-4 h-4 text-zinc-500 mb-2" />
+                <div className="text-[10px] uppercase tracking-wider text-zinc-500">Education</div>
+                <div className="text-xs font-bold text-zinc-300">Master's Deg.</div>
+              </div>
+              <div className="p-3 bg-zinc-900/30 border border-zinc-800/50 rounded">
+                <Landmark className="w-4 h-4 text-zinc-500 mb-2" />
+                <div className="text-[10px] uppercase tracking-wider text-zinc-500">Wealth Level</div>
+                <div className="text-xs font-bold text-zinc-300">Upper Middle</div>
+              </div>
+            </div>
+
+            {/* Active Memories */}
+            <div>
+              <h3 className="text-[10px] uppercase tracking-[0.2em] text-zinc-600 font-bold mb-3 flex items-center gap-2">
+                <Heart className="w-3 h-3" /> Core Memories
+              </h3>
+              <div className="space-y-2 border-l border-zinc-800 ml-2 pl-3">
+                <div className="relative">
+                  <div className="absolute -left-[17px] top-1.5 w-2 h-2 rounded-full bg-zinc-700 border border-[#0a0a0c]" />
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    <span className="font-bold text-zinc-300">Age 38:</span> Lost his younger brother in the Sector 2 infrastructure collapse. Harbors deep distrust of local government.
+                  </p>
+                </div>
+                <div className="relative pt-2">
+                  <div className="absolute -left-[17px] top-3.5 w-2 h-2 rounded-full bg-zinc-700 border border-[#0a0a0c]" />
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    <span className="font-bold text-zinc-300">Age 40:</span> Promoted to Senior Architect. Purchased first home.
+                  </p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </aside>
 
