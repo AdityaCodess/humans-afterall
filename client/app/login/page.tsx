@@ -1,12 +1,51 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
+import { Globe, Shield } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [otpCode, setOtpCode] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Initialize Google Identity Services
+    if (window.google) {
+      window.google.accounts.id.initialize({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
+        callback: handleGoogleLogin,
+      });
+
+      // Render the official Google button inside our target div
+      window.google.accounts.id.renderButton(
+        document.getElementById('google-btn'),
+        { theme: 'filled_black', size: 'large', width: '100%', shape: 'rectangular' }
+      );
+    }
+  }, []);
+
+  async function handleGoogleLogin(response: any) {
+    try {
+      // Send the token to your backend/database route
+      const res = await fetch('http://localhost:4000/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential }),
+      });
+
+      if (res.ok) {
+        // Redirect straight into the simulation command center
+        router.push('/play');
+      } else {
+        console.error('Authentication failed on backend');
+      }
+    } catch (err) {
+      console.error('Network error during auth', err);
+    }
+  }
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,9 +87,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Initiating Google OAuth...");
-  };
 
   if (isLoggedIn) {
     return (
@@ -130,13 +166,10 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 border-t-2 border-zinc-800 pt-6">
-            <button
-              onClick={handleGoogleLogin}
-              type="button"
-              className="w-full bg-zinc-800 border-b-4 border-zinc-950 active:border-b-0 active:translate-y-1 rounded-xl px-4 py-3 text-md font-black text-zinc-400 uppercase tracking-wide transition-all hover:text-white"
-            >
-              Continue with Google
-            </button>
+            {/* The actual Google button gets rendered inside this div */}
+            <div className="w-full flex justify-center bg-zinc-950 rounded-xl p-1 shadow-inner">
+              <div id="google-btn" className="w-full flex justify-center" />
+            </div>
           </div>
         </div>
       </div>
